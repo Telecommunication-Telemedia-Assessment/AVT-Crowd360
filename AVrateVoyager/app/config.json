@@ -1,0 +1,9 @@
+{
+    "welcome_msg": "360 degree video",
+    "rating_template": "rating/noratings.tpl",
+    "title": "360 degree video",
+    "max_stimuli": 20,
+    "cookie_secret": "x-files-forever",
+    "http_user_name": "stg7",
+    "http_user_password": "test"
+}

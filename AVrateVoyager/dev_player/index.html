@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>videojs-vr Demo</title>
+   <link href="dist/video-js.min.css" rel="stylesheet">
+   <link href="dist/videojs-vr.css" rel="stylesheet">
+</head>
+<body>
+  <video width="640" height="300" id="videojs-vr-player" class="video-js vjs-default-skin" controls playsinline>
+    <source src="samples/eagle-360.mp4" type="video/mp4">
+  </video>
+  <ul>
+    <li><a href="../">return to main example</a></li>
+  </ul>
+  <script src="dist/video.min.js"></script>
+  <script src="dist/videojs-vr.min.js"></script>
+  <script src="dist/three.min.js"></script>
+  <script>
+    (function(window, videojs) {
+      var player = window.player = videojs('videojs-vr-player');
+      player.mediainfo = player.mediainfo || {};
+      player.mediainfo.projection = '360';
+
+      // AUTO is the default and looks at mediainfo
+      var vr = window.vr = player.vr({projection: 'AUTO', debug: true, forceCardboard: false});
+      // Set to Fullscreen
+      setInterval( function() {
+        if (player.paused() == false) {
+          player.requestFullscreen()
+          player.controls(false)
+        }
+        if (player.remainingTime() == 0) {
+          player.exitFullscreen()
+        }
+      }, 10);
+
+      data = { 'filename': 'eagle-360', 'pitch_yaw_roll_data_hmd': [] } // change filename to not static!!!
+
+      setInterval( function() {
+        spherical = new THREE.Spherical().setFromVector3(vr.cameraVector);
+        yaw = (spherical["theta"]*180/Math.PI - 180) * -1;
+        if (yaw > 180) {
+          yaw = 360 - yaw;
+        }
+        pitch = (spherical["phi"]*180/Math.PI - 90) * -1;
+        console.log("pitch ", pitch, "yaw ", yaw)
+        data["pitch_yaw_roll_data_hmd"].push({'pitch': pitch, 'yaw': yaw,
+                                                'sec': player.currentTime()})
+      }, 50);
+      //
+      // var camera_position = vr.cameraVector;
+      // console.log(camera_position["x"]);
+    }(window, window.videojs));
+  </script>
+</body>
+</html>

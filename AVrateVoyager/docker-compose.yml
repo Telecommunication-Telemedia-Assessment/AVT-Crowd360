@@ -1,0 +1,13 @@
+version: '3'
+services:
+
+  web:
+    build: .
+
+    ports:
+#      - "8072:80"
+      - "127.0.0.1:8072:80"
+    volumes:
+      - ./app:/app
+
+    restart: always
